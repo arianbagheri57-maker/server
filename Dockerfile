@@ -1,31 +1,32 @@
-FROM node:22-bookworm
+FROM eclipse-temurin:21-jre
 
 WORKDIR /app
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        openjdk-21-jre-headless \
         curl \
         ca-certificates \
-        tar \
-        gzip \
         unzip \
         procps \
+        tar \
+        gzip \
     && rm -rf /var/lib/apt/lists/*
 
-COPY package.json ./
+COPY package*.json ./
 
-RUN npm install --omit=dev
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends nodejs npm \
+    && rm -rf /var/lib/apt/lists/* \
+    && npm install --omit=dev
 
-COPY server.js ./
+COPY . .
 
-RUN mkdir -p /data/server /data/backups
+RUN mkdir -p /app/data
 
 ENV PORT=3000
 ENV MC_PORT=25565
-ENV DATA_DIR=/data
 
 EXPOSE 3000
 EXPOSE 25565
 
-CMD ["node", "server.js"]
+CMD ["npm", "start"]
