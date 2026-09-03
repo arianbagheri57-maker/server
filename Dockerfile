@@ -21,6 +21,5 @@ ENV JAVA_TOOL_OPTIONS="-XX:+UseG1GC"
 EXPOSE 3000
 EXPOSE 25565
 
-VOLUME ["/data"]
 
 CMD ["node", "server.js"]
