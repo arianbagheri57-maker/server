@@ -1,16 +1,18 @@
-FROM node:22-bookworm
+FROM eclipse-temurin:21-jdk-jammy
 
-WORKDIR /app
-
+# Install Node.js 22
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-       openjdk-21-jre-headless \
        curl \
        ca-certificates \
        unzip \
        procps \
        tar \
+    && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+    && apt-get install -y --no-install-recommends nodejs \
     && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
 
 COPY package.json ./
 RUN npm install --omit=dev
