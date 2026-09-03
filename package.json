@@ -1,8 +1,8 @@
 {
-  "name": "minecraft-railway-panel",
-  "version": "1.0.0",
+  "name": "railway-minecraft-panel",
+  "version": "2.0.0",
   "private": true,
-  "description": "Minecraft server panel designed for Railway",
+  "description": "Minecraft server panel for Railway",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
