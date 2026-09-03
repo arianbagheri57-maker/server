@@ -1,26 +1,25 @@
 FROM node:22-bookworm
 
-# نصب Java 21 برای اجرای Minecraft
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-       openjdk-21-jre-headless \
-       curl \
-       ca-certificates \
-       unzip \
-       procps \
-       tar \
-    && rm -rf /var/lib/apt/lists/*
-
 WORKDIR /app
 
-# نصب وابستگی‌های Node
+# نصب Java 21 از Adoptium
+RUN curl -fsSL https://api.adoptium.net/v3/binary/latest/21/ga/linux/x64/jre/hotspot/normal/eclipse \
+    -o /tmp/java.tar.gz \
+    && mkdir -p /opt/java \
+    && tar -xzf /tmp/java.tar.gz -C /opt/java --strip-components=1 \
+    && rm /tmp/java.tar.gz
+
+ENV JAVA_HOME=/opt/java
+ENV PATH="/opt/java/bin:${PATH}"
+
+# Node dependencies
 COPY package.json ./
 RUN npm install --omit=dev
 
-# کد برنامه
+# Application
 COPY server.js ./
 
-# پوشه‌های مربوط به Minecraft و Backup
+# Minecraft data
 RUN mkdir -p /data/server /data/backups
 
 ENV PORT=3000
